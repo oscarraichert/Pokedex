@@ -6,5 +6,6 @@ export interface IPokemonServices {
     obterNomePokemon(): string;
     buscarPokemon(): void;
     configurarElementos(): void;
-    obterBaseStats(dados: any): void;
+    mostrarBaseStats(dados: any): void;
+    obterBaseStats(stats: any);
 }

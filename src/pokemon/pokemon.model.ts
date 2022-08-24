@@ -1,4 +1,4 @@
 export class Pokemon {
     public name: string;
-    public baseStats: [];
+    public baseStats: any[];
 }

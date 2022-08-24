@@ -1,4 +1,5 @@
 
+import { idText } from "typescript";
 import { Pokemon } from "../pokemon/pokemon.model.js";
 import { IPokemonServices } from "./pokemon.services.interface.js";
 
@@ -10,20 +11,34 @@ export class PokemonServices implements IPokemonServices {
         this.configurarElementos();
     }
 
-    obterBaseStats(dados: any): void {
+    obterBaseStats(stats: any) {
 
-        const pokemon = new Pokemon();
-        pokemon.name = dados.name;
-        pokemon.baseStats = dados.stats;
+        let statsHTML = document.getElementsByClassName('stat') as HTMLCollection;
+
+        let htmlStats = Array.from(statsHTML);
+
+        stats.forEach(stat => {
+
+            htmlStats.forEach(htmlStat => {
+
+                if (htmlStat.id.includes(stat.stat.name)) {
+                    htmlStat.textContent = `${stat.stat.name} : ${stat.base_stat}`;
+                }
+            });
+        });
+    }
+
+    mostrarBaseStats(pokemon: any): void {
 
         const sprite = document.getElementById("sprite") as HTMLImageElement;
         let nomePokemon = document.getElementById("nomePokemon") as HTMLParagraphElement;
 
+        this.obterBaseStats(pokemon.stats);
+
+        sprite.src = pokemon.sprites.front_default;
         nomePokemon.textContent = pokemon.name.toUpperCase();
-        sprite.src = dados.sprites.front_default;
 
-        console.log(dados.sprites.front_default);
-
+        console.log(pokemon.stats);
     }
 
     async buscarPokemon() {
@@ -33,7 +48,7 @@ export class PokemonServices implements IPokemonServices {
 
         const dados = await response.json();
 
-        this.obterBaseStats(dados);
+        this.mostrarBaseStats(dados);
     }
 
     configurarElementos(): void {
@@ -46,7 +61,7 @@ export class PokemonServices implements IPokemonServices {
     obterNomePokemon(): string {
         const txtBoxContent = document.getElementById("txtPokemon") as HTMLInputElement;
 
-        const pokeName = txtBoxContent.value;
+        const pokeName = txtBoxContent.value.toLowerCase();
 
         return pokeName;
     }
