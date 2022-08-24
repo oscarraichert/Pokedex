@@ -1,4 +1,5 @@
 
+import { Pokemon } from "../pokemon/pokemon.model.js";
 import { IPokemonServices } from "./pokemon.services.interface.js";
 
 export class PokemonServices implements IPokemonServices {
@@ -9,6 +10,22 @@ export class PokemonServices implements IPokemonServices {
         this.configurarElementos();
     }
 
+    obterBaseStats(dados: any): void {
+
+        const pokemon = new Pokemon();
+        pokemon.name = dados.name;
+        pokemon.baseStats = dados.stats;
+
+        const sprite = document.getElementById("sprite") as HTMLImageElement;
+        let nomePokemon = document.getElementById("nomePokemon") as HTMLParagraphElement;
+
+        nomePokemon.textContent = pokemon.name.toUpperCase();
+        sprite.src = dados.sprites.front_default;
+
+        console.log(dados.sprites.front_default);
+
+    }
+
     async buscarPokemon() {
         const nomePokemon = this.obterNomePokemon();
 
@@ -16,9 +33,7 @@ export class PokemonServices implements IPokemonServices {
 
         const dados = await response.json();
 
-        const pokemon = dados.name;
-
-        console.log(pokemon);
+        this.obterBaseStats(dados);
     }
 
     configurarElementos(): void {
@@ -32,8 +47,6 @@ export class PokemonServices implements IPokemonServices {
         const txtBoxContent = document.getElementById("txtPokemon") as HTMLInputElement;
 
         const pokeName = txtBoxContent.value;
-
-        console.log(pokeName);
 
         return pokeName;
     }
