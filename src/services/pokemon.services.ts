@@ -1,6 +1,5 @@
 
 import { idText } from "typescript";
-import { Pokemon } from "../pokemon/pokemon.model.js";
 import { IPokemonServices } from "./pokemon.services.interface.js";
 
 export class PokemonServices implements IPokemonServices {
