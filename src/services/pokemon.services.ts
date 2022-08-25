@@ -10,29 +10,26 @@ export class PokemonServices implements IPokemonServices {
         this.configurarElementos();
     }
 
-    obterBaseStats(stats: any) {
+    mostrarBaseStats(stats: any) {
 
-        let statsHTML = document.getElementsByClassName('stat') as HTMLCollection;
-
-        let htmlStats = Array.from(statsHTML);
+        let list = document.getElementById('stats');
 
         stats.forEach(stat => {
 
-            htmlStats.forEach(htmlStat => {
+            let listItem = document.createElement('li');
 
-                if (htmlStat.id.includes(stat.stat.name)) {
-                    htmlStat.textContent = `${stat.stat.name} : ${stat.base_stat}`;
-                }
-            });
+            list.appendChild(listItem);
+
+            listItem.innerText = `${stat.stat.name.toUpperCase()} : ${stat.base_stat}`;
         });
     }
 
-    mostrarBaseStats(pokemon: any): void {
+    mostrarSpriteNome(pokemon: any): void {
 
         const sprite = document.getElementById("sprite") as HTMLImageElement;
         let nomePokemon = document.getElementById("nomePokemon") as HTMLParagraphElement;
 
-        this.obterBaseStats(pokemon.stats);
+        this.mostrarBaseStats(pokemon.stats);
 
         sprite.src = pokemon.sprites.front_default;
         nomePokemon.textContent = pokemon.name.toUpperCase();
@@ -41,13 +38,26 @@ export class PokemonServices implements IPokemonServices {
     }
 
     async buscarPokemon() {
+
+        this.clearStats();
+
         const nomePokemon = this.obterNomePokemon();
 
         const response = await fetch(this.pokeApi + nomePokemon);
 
         const dados = await response.json();
 
-        this.mostrarBaseStats(dados);
+        this.mostrarSpriteNome(dados);
+    }
+
+    private clearStats() {
+        let statList = document.getElementById('stats');
+
+        let stats = Array.from(statList.children);
+
+        stats.forEach(stat => {
+            stat.remove();
+        });
     }
 
     configurarElementos(): void {
